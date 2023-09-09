@@ -1,0 +1,86 @@
+<%- include('partials/header') %>
+<div class="container-fluid" style="padding: 0;">
+    <div class="container-fluid text-dark" style="background-color: #E3FDFD;">
+        <div class="container custext1">
+            <h1 class="text-center" style="padding-top: 10px; font-weight: bold">Teacher Dashboard</h1>
+            <div class="row" style="padding-top: 10px;">
+                <div class="col-md-6">
+                    <h4>Teacher Name: <%=name %></h4>
+                </div>
+                <div class="col-md-6 text-md-right">
+                    <h4>Username: <%=username %></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h5>Email: <%=email %></h5>
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="background-color: #CBF1F5;">
+        <div class="container font-weight-bold">
+            <nav class="navbar navbar-light navbar-expand-sm" style="background-color: #CBF1F5; padding-left: 0;">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav">
+                    <a class="nav-link active" href="/home">Console</a>
+                    <a class="nav-link" href="#">Profile</a>
+                  </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="container border shadow p-3 mb-5 bg-white rounded" style="margin-top: 2rem;">
+        <form action="/home/markssa1" method="post">
+            <div class="row" style="text-align: center;">
+                <div class="col-md-4">
+                    <label for="sclass">Class: </label>
+                    <input type="text" class="form-control" name="sclass" id="sclass" value="<%= cl %>" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label for="ssection">Section: </label>
+                    <input type="text" class="form-control" name="ssection" id="ssection" value="<%= section %>" readonly>
+                </div>
+                <div class="col-md-4">
+                    <label for="ssubject">Subject: </label>
+                    <input type="text" class="form-control" name="ssubject" id="ssubject" value="<%= subject %>" readonly>
+                </div>
+            </div>
+            <br>
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Roll</th>
+                    <th scope="col">CT (20)</th>
+                    <th scope="col">SA (80)</th>
+                </thead>
+                <tbody>
+                    <% var i=0; %>
+                    <% for(i=0;i<result.length;i++){ %>
+                        <tr id="ts<%= i+1 %>" name="ts<%= i+1 %>">
+                            <th scope="row"><input type="text" class="form-control" name="sid" id="sid" value="<%= result[i].id %>" readonly></th>
+                            <td><input type="text" class="form-control" name="sname" id="sname" value="<%= result[i].name %>" readonly></td>
+                            <td><input type="text" class="form-control" name="sroll" id="sroll" value="<%= result[i].roll %>" readonly></td>
+                            <td><input type="text" class="form-control" id="as" name="as"></td>
+                            <td><input type="text" class="form-control" id="bs" name="bs"></td>
+                        </tr>
+                    <%}%>
+                </tbody>
+            </table>
+            <input type="hidden" name="count" value="<%= i%>">
+            <button type="submit" class="btn btn-lg btn-info">Submit</button>
+            
+        </form>
+    </div>
+    
+</div>
+
+
+
+
+<%- include('partials/footer') %>

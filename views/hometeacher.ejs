@@ -1,0 +1,112 @@
+<%- include('partials/header') %>
+    <div class="container-fluid" style="padding: 0;">
+        <div class="container-fluid text-dark" style="background-color: #E3FDFD;">
+            <div class="container custext1">
+                <h1 class="text-center" style="padding-top: 10px; font-weight: bold">Teacher Dashboard</h1>
+                <div class="row" style="padding-top: 10px;">
+                    <div class="col-md-6">
+                        <h4>Teacher Name: <%=name %></h4>
+                    </div>
+                    <div class="col-md-6 text-md-right">
+                        <h4>Username: <%=username %></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h5>Email: <%=email %></h5>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid" style="background-color: #CBF1F5;">
+            <div class="container font-weight-bold">
+                <nav class="navbar navbar-light navbar-expand-sm" style="background-color: #CBF1F5; padding-left: 0;">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                      <div class="navbar-nav">
+                        <a class="nav-link active" href="#">Console</a>
+                        <a class="nav-link" href="#">Profile</a>
+                      </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="container border shadow p-3 mb-5 bg-white rounded" style="margin-top: 2rem;">
+            <form action="/home" method="post">
+                <div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select name="cl" id="cl" class="form-control">
+                                <option value="">Select Class</option>
+                                <% for(var count=0; count<data.length; count++){ %>
+                                    <option value="<%= data[count].class %>"><%= data[count].class %></option>
+                                <%}%>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="section" id="section" class="form-control">
+                                <option value="">Select Section</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="subject" id="subject" class="form-control">
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" style="text-align: center;">
+                            <button type="submit" class="btn btn-lg btn-info">Enter Marks For SA1</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+        
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script>
+        function jsset(){
+            function _(element){
+                return document.getElementById(element);
+            }
+    
+            function fetch_data(parent_element, child_element, type){
+                fetch('/get_data?type='+type+'&parent_value='+parent_element.value+'').then(function(response){
+                return response.json();
+            }).then(function(responseData){
+                    var html = '';
+                    if(type == 'load_section'){
+                        html = '<option value="">Select Section</option>';
+                    }
+                    if(type == 'load_subject'){
+                        html = '<option value="">Select Subject</option>';
+                    }
+                    for(var count = 0; count < responseData.length; count++){
+                        html += '<option value="'+responseData[count]+'">'+responseData[count]+'</option>';
+                    }
+                    child_element.innerHTML = html;
+                });
+            }
+    
+            _("cl").onchange = function(){
+        
+                fetch_data(_('cl'), _('section'), 'load_section');
+        
+            };
+        
+            _('section').onchange = function(){
+        
+                fetch_data(_('cl'), _('subject'), 'load_subject');
+        
+            };
+        }
+        window.onload = function(){
+            jsset();
+        };
+        
+    </script>
+</body>
+</html>
+
