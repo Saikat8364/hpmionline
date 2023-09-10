@@ -4,6 +4,7 @@ const auth = require('../reqauth.js');
 const authte = require('../authteacher.js');
 const con = require('../database.js');
 const con2 = require('../database2.js');
+const { htmlPrefilter } = require('jquery');
 const router=express.Router()
 
 router.get('/',auth,function(req,res){
@@ -23,7 +24,7 @@ router.post('/',authte,function(req,res){
     var sql = `select id,name,class,section,roll from studentdb where class = ${req.body.cl} and section = '${req.body.section}';`;
     con.query(sql,function(err,result){
         if (err) throw err;
-        res.render('markssa1',{name:req.user.name, username:req.user.name,id:req.user.id, role:req.user.role, email:req.user.email, result:result,subject:req.body.subject, cl:req.body.cl, section:req.body.section});
+        res.render('markssa1',{term:req.body.SA, name:req.user.name, username:req.user.name,id:req.user.id, role:req.user.role, email:req.user.email, result:result,subject:req.body.subject, cl:req.body.cl, section:req.body.section});
     });
     
 });
@@ -31,7 +32,6 @@ router.post('/',authte,function(req,res){
 router.post('/markssa1',authte,function(req,res){
     var i = req.body.count;
     var sub = req.body.ssubject;
-    console.log(i);
     for(var j =0 ; j<i; j++){
         var sid = req.body.sid[j];
         var as = parseFloat(req.body.as[j]);
@@ -53,12 +53,28 @@ router.post('/markssa1',authte,function(req,res){
         }else{
             grade="D";
         }
-        var sql = `INSERT INTO sa1_2023 (sid, subject, sa1ut, sa1main, sa1total, sa1grade, sa1ovrpercent, uploadedby) VALUES ('${sid}', '${sub}', '${as}', '${bs}', '${ts}', '${grade}', '${ts}', '${req.user.name}');`;
+        try {
+            var sql = `INSERT INTO marks_2023 (student_ID, subject, Term, ut, main, total, grade, uploadedby) VALUES ('${sid}', '${sub}', '${req.body.sterm}', '${as}', '${bs}', '${ts}', '${grade}', '${req.user.name}');`;
         con2.query(sql, function(err){
             if (err) throw err;
         })
+        } catch (error) {
+           console.log(err) 
+        }
+        finally{
+            continue;
+        }
+        
     }
     res.redirect('/home');
+});
+
+router.post('/submitted_marks',authte,function(req,res){
+    var sql = `select student_ID,name,roll,ut, main, total from marks_2023 join studentdb where marks_2023.student_ID = studentdb.id and class = '${req.body.tcl}' and section = '${req.body.tsection}' and subject = '${req.body.tsubject}' and term='${req.body.TSA}';`;
+    con2.query(sql, function(err,result){
+        if (err) throw err;
+        res.render('submitted_marks',{term:req.body.TSA, name:req.user.name, username:req.user.name,id:req.user.id, role:req.user.role, email:req.user.email, result:result,subject:req.body.tsubject, cl:req.body.tcl, section:req.body.tsection})
+    });
 });
 
 router.get('/check', function(req,res){

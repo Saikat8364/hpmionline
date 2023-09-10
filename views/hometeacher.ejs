@@ -37,8 +37,15 @@
             <form action="/home" method="post">
                 <div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <select name="cl" id="cl" class="form-control">
+                        <div class="col-md-2">
+                            <select name="SA" id="SA" class="form-control" required>
+                                <option value="">Select Term</option>
+                                <option value="SA1">SA 1</option>
+                                <option value="SA2">SA 2</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select name="cl" id="cl" class="form-control" required>
                                 <option value="">Select Class</option>
                                 <% for(var count=0; count<data.length; count++){ %>
                                     <option value="<%= data[count].class %>"><%= data[count].class %></option>
@@ -46,20 +53,57 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select name="section" id="section" class="form-control">
+                            <select name="section" id="section" class="form-control" required>
                                 <option value="">Select Section</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <select name="subject" id="subject" class="form-control">
+                            <select name="subject" id="subject" class="form-control" required>
                                 <option value="">Select Subject</option>
                             </select>
                         </div>
-                        <div class="col-md-3" style="text-align: center;">
-                            <button type="submit" class="btn btn-lg btn-info">Enter Marks For SA1</button>
+                        <div class="col-md-2" style="text-align: center;">
+                            <button type="submit" class="btn btn-lg btn-info">Enter Marks</button>
                         </div>
                     </div>
                 </div>
+            </form>
+        </div>
+        <div class="container border shadow p-3 mb-5 bg-white rounded" style="margin-top: 2rem;">
+            <form action="/home/submitted_marks" method="post">
+                <div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <select name="TSA" id="TSA" class="form-control" required>
+                                <option value="">Select Term</option>
+                                <option value="SA1">SA 1</option>
+                                <option value="SA2">SA 2</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select name="tcl" id="tcl" class="form-control" required>
+                                <option value="">Select Class</option>
+                                <% for(var count=0; count<data.length; count++){ %>
+                                    <option value="<%= data[count].class %>"><%= data[count].class %></option>
+                                <%}%>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="tsection" id="tsection" class="form-control" required>
+                                <option value="">Select Section</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="tsubject" id="tsubject" class="form-control" required>
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2" style="text-align: center;">
+                            <button type="submit" class="btn btn-lg btn-info">See Marks</button>
+                        </div>
+                    </div>
+                </div>
+                
             </form>
         </div>
     </div>
@@ -100,6 +144,18 @@
         
                 fetch_data(_('cl'), _('subject'), 'load_subject');
         
+            };
+
+            _("tcl").onchange = function(){
+        
+                fetch_data(_('tcl'), _('tsection'), 'load_section');
+
+            };
+
+            _('tsection').onchange = function(){
+
+                fetch_data(_('tcl'), _('tsubject'), 'load_subject');
+
             };
         }
         window.onload = function(){
